@@ -1,0 +1,30 @@
+  # Build the image
+docker build -t ps5jsongenerator:latest .
+
+# Tag it for Docker Hub
+docker tag ps5jsongenerator:latest fbeilke/ps5jsongenerator:latest
+
+# Push to Docker Hub
+docker push fbeilke/ps5jsongenerator:latest
+
+
+
+  # Build the image
+docker build -t ps5contentserver:latest .
+
+# Tag it for Docker Hub
+docker tag ps5contentserver:latest fbeilke/ps5contentserver:latest
+
+# Push to Docker Hub
+docker push fbeilke/ps5contentserver:latest
+
+
+
+  # Build the image
+docker build -t ps5contentloader:latest .
+
+# Tag it for Docker Hub
+docker tag ps5contentloader:latest fbeilke/ps5contentloader:latest
+
+# Push to Docker Hub
+docker push fbeilke/ps5contentloader:latest

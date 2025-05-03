@@ -1,0 +1,17 @@
+version: '3'
+services:
+  ps5jsongenerator:
+    image: ps5jsongenerator:latest
+    container_name: ps5jsongenerator
+    volumes:      
+      - /volume1/games/ps4:/volume1/games/ps4
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - GAME_DIR=/volume1/games/ps4
+      - OUTPUT_DIR=_ps5ContentLoader
+      - SERVER_URL=http://192.168.1.190:8084
+      - JSON_GAMES=GAMES.json
+      - JSON_UPDATES=UPDATES.json
+      - JSON_DLC=DLC.json
+    restart: unless-stopped
+

@@ -1,0 +1,4 @@
+# Run every 6 hours after initial delay
+0 */6 * * * /app/jsonGenerator.sh >> /var/log/cron.log 2>&1
+
+# Empty line required

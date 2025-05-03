@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  ps5jsongenerator:
+    image: ps5jsongenerator:latest
+    container_name: ps5jsongenerator
+    volumes:      
+      - /volume1/games/ps4:/volume1/games/ps4
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - GAME_DIR=/volume1/games/ps4
+      - OUTPUT_DIR=_ps5ContentLoader
+      - SERVER_URL=http://192.168.1.190:8084
+      - JSON_GAMES=GAMES.json
+      - JSON_UPDATES=UPDATES.json
+      - JSON_DLC=DLC.json
+    restart: unless-stopped    
+
+  ps5contentserver:
+    image: ps5contentserver:latest
+    container_name: ps5contentserver
+    ports:
+      - "8084:8080"
+    volumes:
+      - /volume1/games/ps4:/usr/src/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  ps5contentloader:
+    image: ps5contentloader:latest
+    container_name: ps5contentloader
+    ports:
+      - "5000:5000"
+    environment:
+      - PS5_IP=192.168.20.60
+      - DPI_PORT=9090
+      - PAYLOAD_PORT=9020
+      - GAME_URL=http://192.168.1.190:8084/_ps5ContentLoader/GAMES.json
+      - UPDATE_URL=http://192.168.1.190:8084/_ps5ContentLoader/UPDATES.json
+      - DLC_URL=http://192.168.1.190:8084/_ps5ContentLoader/DLC.json
+    volumes:
+      - /volume1/games/ps4/_ps5ContentLoader/payloads:/app/data/payloads
+    restart: unless-stopped
+    depends_on:
+      ps5contentserver:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
