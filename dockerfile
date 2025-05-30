@@ -24,19 +24,5 @@ WORKDIR /app
 COPY jsonGenerator.sh /app/jsonGenerator.sh
 RUN chmod +x /app/jsonGenerator.sh
 
-# Copy cron configuration
-COPY cronjobs /etc/cron.d/cronjobs
-RUN chmod 0644 /etc/cron.d/cronjobs && \
-    crontab /etc/cron.d/cronjobs
-
-# Create log file
-RUN touch /var/log/cron.log
-
-# Startup script with 30-minute delay
-RUN echo -e '#!/bin/sh\n\
-echo "Container started, waiting 30 minutes for first run..."\n\
-sleep 1800\n\
-echo "Starting cron in foreground..."\n\
-crond -l 2 -f' > /start.sh && chmod +x /start.sh
-
-CMD ["/start.sh"]
+# Run the script once and exit
+CMD ["/app/jsonGenerator.sh"]
