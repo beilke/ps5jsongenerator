@@ -1,5 +1,3 @@
-# ps5jsongenerator
-
 # PS5 JSON Generator
 
 This project automates the generation of JSON metadata and cover images for PlayStation 5 (and PS4) PKG files. It is designed to run in a Docker container and can be triggered manually or as part of a scheduled job.
